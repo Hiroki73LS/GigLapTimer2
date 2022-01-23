@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:BigLapTimer.xcodeproj">
+      location = "group:/Users/hayashi/Desktop/code/BigLapTimer2/BigLapTimer2.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
