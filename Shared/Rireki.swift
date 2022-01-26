@@ -28,14 +28,20 @@ class Model: Object {
     @objc dynamic var kirokuday = Date()
     @objc dynamic var lapsuu = 0
     @objc dynamic var Rirekitotal = ""
+    var tickets = RealmSwift.List<LapArray>()                  // Listの定義？
+}
+
+class LapArray: Object {                                        //Listのためのclassを作成？
+    @objc dynamic var lapArray: String = ""
+
+    var memos: LinkingObjects<Model> {
+        return LinkingObjects(fromType: Model.self, property: "tickets")}
 }
 
 class viewModel: ObservableObject {
     
     private var ArrayCount :Int = 0
     private var intArray = [Int]()
-    var motoArray = Array(1...30)
-    private var sakujyo :Int = 0
     
     private var token: NotificationToken?
     private var myModelResults = try? Realm().objects(Model.self).sorted(byKeyPath: "kirokuday", ascending: false)
@@ -47,25 +53,6 @@ class viewModel: ObservableObject {
         }
         
         self.cellModels = self.myModelResults?.map {ContentViewCellModel(id: $0.id, condition: $0.condition, kirokuday: $0.kirokuday, lapsuu: $0.lapsuu, Rirekitotal: $0.Rirekitotal) } ?? []
-        
-        //RealmからBatteryNoを取得して配列に格納してソート↓-------------------
-        let realm = try? Realm()
-        let btNo = realm?.objects(Model.self)
-        ArrayCount = btNo!.count //配列の数を代入
-        for i in 0 ..< ArrayCount {
-            intArray.append(btNo![i].lapsuu)
-            intArray.sort()
-        }
-        //RealmからBatteryNoを取得して配列に格納してソート↑-------------------
-        //配列から要素のインデックス番号を検索し、該当するインデックス番号の要素を削除↓-------------------
-        
-        for i in 0 ..< ArrayCount {
-            sakujyo = intArray[i]
-            if let firstIndex = motoArray.firstIndex(of: sakujyo + 1) {
-                motoArray.remove(at: firstIndex)
-            }
-        }
-        //配列から要素のインデックス番号を検索し、該当するインデックス番号の要素を削除↑-------------------
         
     }
     

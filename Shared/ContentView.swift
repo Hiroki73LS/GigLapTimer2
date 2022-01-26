@@ -218,14 +218,17 @@ struct ContentView: View {
                                     models.lapsuu = laptime.count
                                     models.Rirekitotal = String(format: "%02d:%02d.%02d", stopWatchManeger.minutes, stopWatchManeger.second, stopWatchManeger.milliSecond)
                                     models.kirokuday = Date()
-                                    
+                                    print("laptime:\(laptime)")
+                                    print("models.tickets:\(models.tickets)")
                                     let realm = try? Realm()
+
                                     try? realm?.write {
+                                        models.tickets.removeAll()
+                                        models.tickets.append(objectsIn: laptime) //Listへの追加処理？
                                         realm?.add(models)
+                                        print(models)
                                     }
                                     //-書き込み---------------------------書き込み---------------------------書き込み--------------------------
-                                    print("add:\(models)")
-                                    
                                     total.removeAll()
                                     laptime.removeAll()
                                     lapNo.removeAll()
