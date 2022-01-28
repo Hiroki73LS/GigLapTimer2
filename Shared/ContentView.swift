@@ -213,21 +213,35 @@ struct ContentView: View {
                                 }
                                 Button(action: {
                                     //-書き込み---------------------------書き込み---------------------------書き込み--------------------------
-                                    let models = Model()
-                                    models.condition = false
-                                    models.lapsuu = laptime.count
-                                    models.Rirekitotal = String(format: "%02d:%02d.%02d", stopWatchManeger.minutes, stopWatchManeger.second, stopWatchManeger.milliSecond)
-                                    models.kirokuday = Date()
-                                    print("laptime:\(laptime)")
-                                    print("models.tickets:\(models.tickets)")
-                                    let realm = try? Realm()
 
-                                    try? realm?.write {
-                                        models.tickets.removeAll()
-                                        models.tickets.append(objectsIn: laptime) //Listへの追加処理？
-                                        realm?.add(models)
-                                        print(models)
+                                    do {
+                                        let realm = try Realm()
+                                        try realm.write {
+                                            let models = Model()
+                                            models.condition = false
+                                            models.lapsuu = laptime.count
+                                            models.Rirekitotal = String(format: "%02d:%02d.%02d", stopWatchManeger.minutes, stopWatchManeger.second, stopWatchManeger.milliSecond)
+                                            models.kirokuday = Date()
+                                            print("laptime:\(laptime)")
+                                            print("models.tickets:\(models.tickets)")
+                                            
+                                            models.tickets.append(objectsIn: laptime) //Listへの追加処理
+                                            realm.add(models) // modelsをRealmデータベースに書き込みます
+                                            
+                                            print(models)
+                                            
+                                            // 読み込み処理 ↓
+                                            let targets = realm.objects(Model.self) // RealmデータベースからModelオブジェクトをすべて取得します
+                                            let target = targets.first { $0.id == models.id } // 取得したModelオブジェクト群から、ほしいものを1つ取り出します
+                                            print(target?.tickets.joined(separator: ", ") ?? "空") // ticketsに格納されたラップタイムを表示します
+                                            // 読み込み処理 ↑
+                                        }
+
+                                    } catch {
+                                        print(error)
                                     }
+                                    
+                                    
                                     //-書き込み---------------------------書き込み---------------------------書き込み--------------------------
                                     total.removeAll()
                                     laptime.removeAll()

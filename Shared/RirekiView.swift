@@ -5,14 +5,15 @@ import RealmSwift
 
 struct RirekiView: View {
     
-    var lapcount = Array(1...99)
     @ObservedObject var model = viewModel()
-    var id = ""
     @State var condition : Bool = false
+    var id = ""
     var lapsuu : Int = 0
-    var Rirekitotal : String = ""
+    var lapcount = Array(1...99)
     var kirokuday = Date()
-    
+    var Rirekitotal : String = ""
+    var tickets = RealmSwift.List<String>()
+
     var dateFormat: DateFormatter {
         let dformat = DateFormatter()
         dformat.dateFormat = "yyyy/M/d"
@@ -71,8 +72,7 @@ struct RirekiView: View {
                                     .stroke(Color.black, lineWidth: 1)
                             )
                             Spacer()
-                            Text("00:00.00")
-                            //                    Text(laptime[index])
+                            Text("\(tickets[cellModel])")
                                 .font(Font.custom("HiraginoSans-W3", size: 50))
                                 .font(.system(size: 50, design: .monospaced))
                             Spacer()

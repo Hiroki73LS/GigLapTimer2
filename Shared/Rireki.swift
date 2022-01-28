@@ -20,6 +20,7 @@ struct ContentViewCellModel {
     let kirokuday : Date
     let lapsuu : Int
     let Rirekitotal : String
+    let tickets : RealmSwift.List<String>
 }
 
 class Model: Object {
@@ -28,7 +29,7 @@ class Model: Object {
     @objc dynamic var kirokuday = Date()
     @objc dynamic var lapsuu = 0
     @objc dynamic var Rirekitotal = ""
-    var tickets = RealmSwift.List<LapArray>()                  // Listの定義？
+    var tickets = RealmSwift.List<String>()                  // Listの定義？
 }
 
 class LapArray: Object {                                        //Listのためのclassを作成？
@@ -49,10 +50,10 @@ class viewModel: ObservableObject {
     
     init() {
         token = myModelResults?.observe { [weak self] _ in
-            self?.cellModels = self?.myModelResults?.map {ContentViewCellModel(id: $0.id, condition: $0.condition, kirokuday: $0.kirokuday, lapsuu: $0.lapsuu, Rirekitotal: $0.Rirekitotal) } ?? []
+            self?.cellModels = self?.myModelResults?.map {ContentViewCellModel(id: $0.id, condition: $0.condition, kirokuday: $0.kirokuday, lapsuu: $0.lapsuu, Rirekitotal: $0.Rirekitotal, tickets: $0.tickets) } ?? []
         }
         
-        self.cellModels = self.myModelResults?.map {ContentViewCellModel(id: $0.id, condition: $0.condition, kirokuday: $0.kirokuday, lapsuu: $0.lapsuu, Rirekitotal: $0.Rirekitotal) } ?? []
+        self.cellModels = self.myModelResults?.map {ContentViewCellModel(id: $0.id, condition: $0.condition, kirokuday: $0.kirokuday, lapsuu: $0.lapsuu, Rirekitotal: $0.Rirekitotal, tickets: $0.tickets) } ?? []
         
     }
     
@@ -69,6 +70,7 @@ struct Rireki: View {
     @State private var lapsuuDetail : Int = 0
     @State private var RirekitotalDetail : String = ""
     @State private var kirokudayDetail = Date()
+    @State private var ticketsDetail = RealmSwift.List<String>()
     
     @State private var isShown: Bool = false
     @State private var isShown2: Bool = false
@@ -108,9 +110,10 @@ struct Rireki: View {
                                 lapsuuDetail = cellModel.lapsuu
                                 RirekitotalDetail = cellModel.Rirekitotal
                                 kirokudayDetail = cellModel.kirokuday
+                                ticketsDetail = cellModel.tickets
                                 self.showAlert = true
                             }, label: {
-                                NavigationLink(destination: RirekiView(id: idDetail, condition : conditionDetail, lapsuu : lapsuuDetail, Rirekitotal : RirekitotalDetail, kirokuday : kirokudayDetail), isActive: $showAlert) {
+                                NavigationLink(destination: RirekiView(condition : conditionDetail, id: idDetail, lapsuu : lapsuuDetail, kirokuday : kirokudayDetail, Rirekitotal : RirekitotalDetail, tickets : ticketsDetail), isActive: $showAlert) {
                                     HStack{
                                         VStack(alignment:.leading) {
                                             Spacer().frame(height: 5)
