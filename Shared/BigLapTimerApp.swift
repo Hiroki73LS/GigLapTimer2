@@ -17,7 +17,7 @@ struct BigLapTimerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView( total: [], laptime: [], lapNo: [], lapn: 1, nowTime: 0)
+            ContentView( total: [], laptime: [], finalLap: [], lapNo: [], lapn: 1, nowTime: 0)
         }
     }
 }

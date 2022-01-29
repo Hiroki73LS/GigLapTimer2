@@ -50,6 +50,7 @@ struct ContentView: View {
     @ObservedObject var stopWatchManeger2 = StopWatchManeger2()
     @State var total : [String]
     @State var laptime : [String]
+    @State var finalLap : [String]
     @State var lapNo : [String]
     @State var lapn = 1
     @State var milliSecond = 0
@@ -220,12 +221,16 @@ struct ContentView: View {
                                             let models = Model()
                                             models.condition = false
                                             models.lapsuu = laptime.count
+                                            models.finalLap = String(format: "%02d:%02d.%02d", stopWatchManeger2.minutes, stopWatchManeger2.second, stopWatchManeger2.milliSecond)
                                             models.Rirekitotal = String(format: "%02d:%02d.%02d", stopWatchManeger.minutes, stopWatchManeger.second, stopWatchManeger.milliSecond)
                                             models.kirokuday = Date()
+
+
                                             print("laptime:\(laptime)")
                                             print("models.tickets:\(models.tickets)")
                                             
                                             models.tickets.append(objectsIn: laptime) //Listへの追加処理
+                                            models.ticketsTotal.append(objectsIn: total) //Listへの追加処理
                                             realm.add(models) // modelsをRealmデータベースに書き込みます
                                             
                                             print(models)

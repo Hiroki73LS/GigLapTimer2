@@ -12,7 +12,9 @@ struct RirekiView: View {
     var lapcount = Array(1...99)
     var kirokuday = Date()
     var Rirekitotal : String = ""
+    var finalLap : String = ""
     var tickets = RealmSwift.List<String>()
+    var ticketsTotal = RealmSwift.List<String>()
 
     var dateFormat: DateFormatter {
         let dformat = DateFormatter()
@@ -40,30 +42,52 @@ struct RirekiView: View {
                 Spacer().frame(height: 10)
                 HStack{
                     VStack{
+                        HStack{
+                    VStack{
                         Text("Total").font(.title2)
                         Text("Time").font(.title2)
                     }
                     Text("\(Rirekitotal)")
                         .font(Font.custom("HiraginoSans-W3", size: 50))
                         .font(.system(size: 50, design: .monospaced))
-                    Button(action: {
-                        condition.toggle()
-                    }){
-                    if condition == true {
-                        Image(systemName: "heart.fill").font(.title)
-                            .foregroundColor(.pink)
-                    } else {
-                        Image(systemName: "heart.fill").font(.title)
-                            .foregroundColor(.secondary)
-                    }}
-                }
+                        }
+                        Rectangle()
+                                .foregroundColor(.orange)
+                                .frame(width: 250, height: 1)
+                        Spacer().frame(height: 10)
+                HStack{
+                    VStack {
+                        Text("Final").font(.title3)
+                        Text("Lap").font(.title3)
+                    }.padding(5)
+                        .overlay(
+                        RoundedRectangle(cornerRadius: 5)
+                            .stroke(Color.black, lineWidth: 1)
+)
+                    Text("\(finalLap)")
+                        .font(Font.custom("HiraginoSans-W3", size: 50))
+                        .font(.system(size: 50, design: .monospaced))
+                }}
+                        Button(action: {
+                            condition.toggle()
+                        }){
+                            VStack{
+                        if condition == true {
+                            Image(systemName: "heart.fill").font(.title)
+                                .foregroundColor(.pink)
+                        } else {
+                            Image(systemName: "heart.fill").font(.title)
+                                .foregroundColor(.secondary)
+                        }
+                                Text("favorite").font(.system(size: 13))
+                            }}}
                 List {
                     ForEach(0 ..< lapsuu, id: \.self) { cellModel in
                         HStack(spacing:2){
                             VStack{
                                 Text("Lap")
                                     .font(.system(size: 15, design: .monospaced))
-                                Text("\(lapcount[cellModel])")
+                                Text("\(lapsuu - lapcount[cellModel] + 1)")
                                 //                        Text(lapNo[cellModel])
                                     .font(.system(size: 25, design: .monospaced))
                             }
@@ -76,8 +100,7 @@ struct RirekiView: View {
                                 .font(Font.custom("HiraginoSans-W3", size: 50))
                                 .font(.system(size: 50, design: .monospaced))
                             Spacer()
-                            Text("00:00.00")
-                            //                    Text("\(total[index])")
+                            Text("\(ticketsTotal[cellModel])")
                                 .font(Font.custom("HiraginoSans-W3", size: 20))
                                 .font(.system(size: 20, design: .monospaced))
                         }
